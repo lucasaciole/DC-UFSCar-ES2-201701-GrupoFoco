@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=JabRef
+Comment=Bibliography Manager
+GenericName=Jabef
+Exec=jaberf.jabref %U
+Icon=${SNAP}/meta/gui/icon.png
+Type=Application
+StartupNotify=true
+StartupWMClass=JabRef
+Categories=Education;
+MimeType=application/x-bibtex;

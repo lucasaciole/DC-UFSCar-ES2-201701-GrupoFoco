@@ -1,0 +1,23 @@
+# based on https://github.com/snapcore/snapcraft/blob/a1aee9da571f09a7c448f2dd3873f0b4ff77d9c8/demos/gradle/snapcraft.yaml
+
+name: jabref
+version: '3.8-dev'
+vendor: JabRef Team <jabrefmail+snapfeedback@gmail.com>
+summary: Bibliography manager
+icon: src/main/resources/images/icons/JabRef-icon.svg
+description: |
+  JabRef is an open source bibliography reference manager. The native file format used by JabRef is BibTeX, the standard
+  LaTeX bibliography format.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+apps:
+   jabref:
+     command: java -jar $SNAP/jar/JabRef-3.8-dev-fat.jar
+
+parts:
+  local:
+    plugin: gradle
+    source: .
+    gradle-options: [shadowJar]

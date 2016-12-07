@@ -13,6 +13,11 @@ services:
 env:
   - GRADLE_OPTS=-Dorg.gradle.daemon=false
 
+before_install:
+  - sudo apt-add-repository -y ppa:snappy-dev/tools
+  - sudo apt-get -qq update
+  - sudo apt-get install -y snapcraft
+
 install: true
 
 before_script:
@@ -20,6 +25,7 @@ before_script:
   - mysql -u root -e 'create database jabref'
 
 script:
+  - snapcraft build
   - ./gradlew check -Dscan
   - ./gradlew fetcherTest -Dscan
   - ./gradlew databaseTest -Dscan
