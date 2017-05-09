@@ -2,7 +2,12 @@ package org.jabref.logic.sharelatex;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -56,8 +61,27 @@ public class SharelatexConnector {
             //  System.out.println(resProjects.body());
 
             System.out.println("");
-            Element scriptContent = resProjects.parse().body().getElementsByTag("script").first();
-            System.out.println(scriptContent.data());
+            Optional<Element> scriptContent = Optional
+                    .of(resProjects.parse().body().getElementsByTag("script").first());
+
+            JsonParser parser = new JsonParser();
+
+            scriptContent.ifPresent(element->{
+                String data = element.data();
+                JsonElement jsonTree = parser.parse(data);
+
+                JsonObject obj = jsonTree.getAsJsonObject();
+                JsonArray projectArray = obj.get("projects").getAsJsonArray();
+
+                for (JsonElement elem : projectArray) {
+
+                    System.out.println("ID " + elem.getAsJsonObject().get("id").getAsString());
+                    System.out.println("Name " + elem.getAsJsonObject().get("name").getAsString());
+                }
+
+
+            });
+
             //script tag parsen
             //Json parsen mit den Projects
 
