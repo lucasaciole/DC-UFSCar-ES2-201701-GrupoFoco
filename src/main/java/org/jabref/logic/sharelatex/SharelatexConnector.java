@@ -36,16 +36,24 @@ public class SharelatexConnector {
             String json = "{\"_csrf\":" + JSONObject.quote(securityTokenValue)
                     + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(pwed) + "}";
 
-            Connection.Response res2 = Jsoup.connect("http://192.168.1.248/login\"")
+            Connection.Response res2 = Jsoup.connect("http://192.168.1.248/project")
                     .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
                     .cookies(welcomCookies)
                     .method(Method.POST)
                     .requestBody(json)
+                    .followRedirects(true)
                     .execute();
 
+            Map<String, String> loginCookies = res2.cookies();
 
-            System.out.println(res2.body());
+            Connection.Response res3 = Jsoup.connect("http://192.168.1.248/project")
+                    .header("Refer", "http://192.168.1.248/login")
+                    .cookies(loginCookies)
+                    .method(Method.GET).execute();
+
+
+            System.out.println(res3.body());
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
