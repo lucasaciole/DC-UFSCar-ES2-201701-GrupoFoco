@@ -8,6 +8,7 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class SharelatexConnector {
 
@@ -36,24 +37,29 @@ public class SharelatexConnector {
             String json = "{\"_csrf\":" + JSONObject.quote(securityTokenValue)
                     + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(pwed) + "}";
 
-            Connection.Response res2 = Jsoup.connect("http://192.168.1.248/project")
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
+            Connection.Response res2 = Jsoup.connect("http://192.168.1.248/login")
+                    .header("Content-Type", "application/json;charset=utf-8")
+                    .header("Accept", "application/json, text/plain, */*")
                     .cookies(welcomCookies)
                     .method(Method.POST)
                     .requestBody(json)
                     .followRedirects(true)
+                    .ignoreContentType(true)
                     .execute();
 
-            Map<String, String> loginCookies = res2.cookies();
+            System.out.println(res2.body());
+            Map<String,String> loginCookies = res2.cookies();
 
-            Connection.Response res3 = Jsoup.connect("http://192.168.1.248/project")
-                    .header("Refer", "http://192.168.1.248/login")
-                    .cookies(loginCookies)
-                    .method(Method.GET).execute();
+            Connection.Response resProjects = Jsoup.connect("http://192.168.1.248/project")
+                    .referrer("http://192.168.1.248/login").cookies(loginCookies).method(Method.GET).execute();
 
+            //  System.out.println(resProjects.body());
 
-            System.out.println(res3.body());
+            System.out.println("");
+            Element scriptContent = resProjects.parse().body().getElementsByTag("script").first();
+            System.out.println(scriptContent.data());
+            //script tag parsen
+            //Json parsen mit den Projects
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
