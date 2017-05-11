@@ -12,10 +12,10 @@ public class ShareLatexLoginDialogView extends AbstractDialogView {
     @Override
     public void show() {
 
-        FXDialog shareLatexLoginDialog = new FXDialog(AlertType.INFORMATION, "Login to sharelatex");
-        shareLatexLoginDialog.setDialogPane((DialogPane) this.getView());
-        shareLatexLoginDialog.setResizable(true);
-        shareLatexLoginDialog.show();
+        FXDialog sharelatexProjectDialog = new FXDialog(AlertType.INFORMATION, "Sharelatex Project Dialog");
+        sharelatexProjectDialog.setDialogPane((DialogPane) this.getView());
+        sharelatexProjectDialog.setResizable(true);
+        sharelatexProjectDialog.show();
     }
 
 }

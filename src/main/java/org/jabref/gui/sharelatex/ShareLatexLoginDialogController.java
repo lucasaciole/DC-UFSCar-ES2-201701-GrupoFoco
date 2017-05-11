@@ -12,11 +12,8 @@ public class ShareLatexLoginDialogController extends AbstractController<ShareLat
     @FXML private Button btnCancel;
     @FXML private Button btnLogin;
     @FXML private TextField tbAddress;
-
     @FXML private TextField tbUsername;
     @FXML private PasswordField pfPassword;
-
-
 
     @FXML
     private void initialize() {
