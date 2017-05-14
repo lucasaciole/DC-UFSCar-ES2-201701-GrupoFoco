@@ -29,5 +29,7 @@ public class ShareLatexLoginDialogController extends AbstractController<ShareLat
     private void signIn() {
         System.out.println("sign in pressed");
         System.out.println(tbAddress.getText());
+        System.out.println(tbUsername.getText());
+        System.out.println(pfPassword.getText());
     }
 }

@@ -30,11 +30,7 @@
             <TextField id="tbUsername" fx:id="tbUsername" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label alignment="CENTER_RIGHT" text="%Username" GridPane.rowIndex="1" />
             <Label text="%Password" GridPane.rowIndex="2" />
-            <PasswordField id="tbPassword" fx:id="pfPassword" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-            </PasswordField>
+            <PasswordField id="tbPassword" fx:id="pfPassword" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
               <buttons>
                   <Button id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#closeDialog" text="%Cancel" />
