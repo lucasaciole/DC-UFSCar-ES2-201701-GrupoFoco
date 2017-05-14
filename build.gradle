@@ -118,10 +118,11 @@ dependencies {
 
 
     compile 'commons-logging:commons-logging:1.2'
-
     compile 'org.apache.commons:commons-lang3:3.5'
 
-    //compile 'org.jsoup:jsoup:1.10.2' Currently buggy
+    //compile 'org.jsoup:jsoup:1.10.2' contains a bug
+    //Until PR https://github.com/jhy/jsoup/pull/881 is merged we use a manual build under lib
+
     compile 'com.mashape.unirest:unirest-java:1.4.9'
     compile 'info.debatty:java-string-similarity:0.23'
 
@@ -142,6 +143,7 @@ dependencies {
     compile group: 'com.microsoft.azure', name: 'applicationinsights-logging-log4j2', version: '1.0.+'
 
     compile "org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13.1"
+    compile "com.google.code.gson:gson:2.8.0"
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.22'

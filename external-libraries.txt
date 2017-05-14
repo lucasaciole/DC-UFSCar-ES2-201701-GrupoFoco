@@ -145,6 +145,11 @@ Projekt: Tyrus
 URL:     https://tyrus.java.net/
 Licence: CDDL 1.1 and GPL 2 with CPE
 
+Id:      com.google.code.gson:gson
+Project: google-gson
+URL:     https://github.com/google/gson
+License: Apache-2.0
+
 Id:      de.jensd:fontawesomefx-materialdesignfont
 Projekt: FontAwesomeFX
 URL:     https://bitbucket.org/Jerady/fontawesomefx
