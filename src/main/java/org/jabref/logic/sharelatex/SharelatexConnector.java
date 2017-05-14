@@ -22,28 +22,29 @@ public class SharelatexConnector {
 
     }
 
-    public void connectToServer(String server, String queryString) {
+    private final String contentType = "application/json; charset=utf-8";
 
-        Connection.Response res1;
+    public void connectToServer(String server, String user, String password) {
+
+        Connection.Response crsfResponse;
         try {
-            res1 = Jsoup.connect("http://192.168.1.248/login").method(Method.GET)
+
+            String loginUrl = server + "/login";
+            String projectUrl = server + "/project";
+
+            crsfResponse = Jsoup.connect(loginUrl).method(Method.GET)
                     .execute();
 
-            String user = "joe@example.com";
-            String pwed = "test";
-
-            Document welcomePage = res1.parse();
-            Map<String, String> welcomCookies = res1.cookies();
+            Document welcomePage = crsfResponse.parse();
+            Map<String, String> welcomCookies = crsfResponse.cookies();
 
             String securityTokenValue = welcomePage.select("input[name=_csrf]").attr("value");
 
-
-
             String json = "{\"_csrf\":" + JSONObject.quote(securityTokenValue)
-                    + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(pwed) + "}";
+                    + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(password) + "}";
 
-            Connection.Response res2 = Jsoup.connect("http://192.168.1.248/login")
-                    .header("Content-Type", "application/json;charset=utf-8")
+            Connection.Response loginResponse = Jsoup.connect(loginUrl)
+                    .header("Content-Type", contentType)
                     .header("Accept", "application/json, text/plain, */*")
                     .cookies(welcomCookies)
                     .method(Method.POST)
@@ -52,21 +53,37 @@ public class SharelatexConnector {
                     .ignoreContentType(true)
                     .execute();
 
-            System.out.println(res2.body());
-            Map<String,String> loginCookies = res2.cookies();
+            System.out.println(loginResponse.body());
+            ///Error handling block
+            if (contentType.equals(loginResponse.contentType())) {
 
-            Connection.Response resProjects = Jsoup.connect("http://192.168.1.248/project")
-                    .referrer("http://192.168.1.248/login").cookies(loginCookies).method(Method.GET).execute();
+                if (loginResponse.body().contains("message")) {
+                    JsonParser parser = new JsonParser();
+                    JsonElement jsonTree = parser.parse(loginResponse.body());
+                    JsonObject obj = jsonTree.getAsJsonObject();
+                    JsonObject message = obj.get("message").getAsJsonObject();
+                    String errorMessage = message.get("text").getAsString();
+                    System.out.println(errorMessage);
+
+                    return;
+                }
+
+            }
+
+            Map<String, String> loginCookies = loginResponse.cookies();
+
+            Connection.Response projectsResponse = Jsoup.connect(projectUrl)
+                    .referrer(loginUrl).cookies(loginCookies).method(Method.GET).execute();
 
             //  System.out.println(resProjects.body());
 
             System.out.println("");
             Optional<Element> scriptContent = Optional
-                    .of(resProjects.parse().body().getElementsByTag("script").first());
+                    .of(projectsResponse.parse().body().getElementsByTag("script").first());
 
             JsonParser parser = new JsonParser();
 
-            scriptContent.ifPresent(element->{
+            scriptContent.ifPresent(element -> {
                 String data = element.data();
                 JsonElement jsonTree = parser.parse(data);
 
@@ -78,7 +95,6 @@ public class SharelatexConnector {
                     System.out.println("ID " + elem.getAsJsonObject().get("id").getAsString());
                     System.out.println("Name " + elem.getAsJsonObject().get("name").getAsString());
                 }
-
 
             });
 
