@@ -96,6 +96,26 @@ public class SharelatexConnector {
                     System.out.println("Name " + elem.getAsJsonObject().get("name").getAsString());
                 }
 
+
+                long millis = System.currentTimeMillis();
+                System.out.println(millis);
+                try {
+                    Connection.Response webSocketresponse = Jsoup.connect("http://192.168.1.248/socket.io/1")
+                            .cookies(loginCookies)
+                            .data("t", String.valueOf(millis)).method(Method.GET).execute();
+
+                    System.out.println(webSocketresponse.body());
+
+                    String resp = webSocketresponse.body();
+                    String channel = resp.substring(0, resp.indexOf(":"));
+                    System.out.println("Channel " + channel);
+
+                    WebSocketClientWrapper.createAndConnect(channel);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
             });
 
             //script tag parsen
