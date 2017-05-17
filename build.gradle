@@ -56,9 +56,9 @@ install4j {
 
 repositories {
     jcenter()
-    maven {
-        url 'https://oss.sonatype.org/content/groups/public'
-    }
+    maven { url "https://oss.sonatype.org/content/groups/public"  }
+	maven { url "https://repo.eclipse.org/content/repositories/paho-snapshots/"  }
+
 }
 
 configurations {
@@ -144,6 +144,9 @@ dependencies {
 
     compile "org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13.1"
     compile "com.google.code.gson:gson:2.8.0"
+	compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.2-SNAPSHOT"
+	
+	
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.22'
