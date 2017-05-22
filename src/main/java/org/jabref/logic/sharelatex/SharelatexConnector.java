@@ -111,7 +111,7 @@ public class SharelatexConnector {
                     System.out.println("Channel " + channel);
 
                     WebSocketClientWrapper.createAndConnect(channel);
-                    //MqttPublishSample.connect(channel);
+                    // MqttPublishSample.connect(channel);
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
