@@ -19,4 +19,20 @@ public class ShareLatexProjectViewModel {
         this.lastUpdated = new SimpleStringProperty(lastUpdated);
 
     }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public StringProperty getProjectTitle() {
+        return projectTitle;
+    }
+
+    public StringProperty getOwner() {
+        return owner;
+    }
+
+    public StringProperty getLastUpdated() {
+        return lastUpdated;
+    }
 }
