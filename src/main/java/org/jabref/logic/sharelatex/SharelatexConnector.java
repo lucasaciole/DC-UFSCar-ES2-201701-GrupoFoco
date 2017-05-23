@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,8 +22,9 @@ public class SharelatexConnector {
     }
 
     private final String contentType = "application/json; charset=utf-8";
+   private final JsonParser parser = new JsonParser();
 
-    public void connectToServer(String server, String user, String password) {
+    public JsonObject connectToServer(String server, String user, String password) {
 
         Connection.Response crsfResponse;
         try {
@@ -58,14 +58,13 @@ public class SharelatexConnector {
             if (contentType.equals(loginResponse.contentType())) {
 
                 if (loginResponse.body().contains("message")) {
-                    JsonParser parser = new JsonParser();
                     JsonElement jsonTree = parser.parse(loginResponse.body());
                     JsonObject obj = jsonTree.getAsJsonObject();
                     JsonObject message = obj.get("message").getAsJsonObject();
                     String errorMessage = message.get("text").getAsString();
                     System.out.println(errorMessage);
 
-                    return;
+                    return message;
                 }
 
             }
@@ -81,53 +80,55 @@ public class SharelatexConnector {
             Optional<Element> scriptContent = Optional
                     .of(projectsResponse.parse().body().getElementsByTag("script").first());
 
-            JsonParser parser = new JsonParser();
 
-            scriptContent.ifPresent(element -> {
-                String data = element.data();
+            if (scriptContent.isPresent()) {
+
+                String data = scriptContent.get().data();
                 JsonElement jsonTree = parser.parse(data);
 
                 JsonObject obj = jsonTree.getAsJsonObject();
-                JsonArray projectArray = obj.get("projects").getAsJsonArray();
 
-                for (JsonElement elem : projectArray) {
+                return obj;
 
-                    System.out.println("ID " + elem.getAsJsonObject().get("id").getAsString());
-                    System.out.println("Name " + elem.getAsJsonObject().get("name").getAsString());
-                }
-
-
-                long millis = System.currentTimeMillis();
-                System.out.println(millis);
-                try {
-                    Connection.Response webSocketresponse = Jsoup.connect("http://192.168.1.248/socket.io/1")
-                            .cookies(loginCookies)
-                            .data("t", String.valueOf(millis)).method(Method.GET).execute();
-
-                    System.out.println(webSocketresponse.body());
-
-                    String resp = webSocketresponse.body();
-                    String channel = resp.substring(0, resp.indexOf(":"));
-                    System.out.println("Channel " + channel);
-
-                    WebSocketClientWrapper.createAndConnect(channel);
-                    // MqttPublishSample.connect(channel);
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-            });
-
-            //script tag parsen
-            //Json parsen mit den Projects
-
+            }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        return null;
     }
-
 }
+/*  for (JsonElement elem : projectArray) {
+
+      System.out.println("ID " + elem.getAsJsonObject().get("id").getAsString());
+      System.out.println("Name " + elem.getAsJsonObject().get("name").getAsString());
+
+  }
+
+
+  long millis = System.currentTimeMillis();
+  System.out.println(millis);
+  try {
+      Connection.Response webSocketresponse = Jsoup.connect("http://192.168.1.248/socket.io/1")
+              .cookies(loginCookies)
+              .data("t", String.valueOf(millis)).method(Method.GET).execute();
+
+      System.out.println(webSocketresponse.body());
+
+      String resp = webSocketresponse.body();
+      String channel = resp.substring(0, resp.indexOf(":"));
+      System.out.println("Channel " + channel);
+
+
+      WebSocketClientWrapper.createAndConnect(channel);
+      // MqttPublishSample.connect(channel);
+
+  } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+  }
+
+});
+
+//script tag parsen
+//Json parsen mit den Projects
+*/
