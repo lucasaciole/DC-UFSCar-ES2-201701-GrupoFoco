@@ -16,16 +16,20 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
 
     @FXML
     private void initialize() {
+
         viewModel = new ShareLatexProjectDialogViewModel();
         colTitle.setCellValueFactory(cellData -> cellData.getValue().getProjectTitle());
         colOwner.setCellValueFactory(cellData -> cellData.getValue().getOwner());
         colLastModified.setCellValueFactory(cellData -> cellData.getValue().getLastUpdated());
+        setBindings();
 
 
     }
 
-    public void setData() {
-
+    private void setBindings() {
+        tblProjects.itemsProperty().bindBidirectional(viewModel.projectsProperty());
     }
+
+
 
 }

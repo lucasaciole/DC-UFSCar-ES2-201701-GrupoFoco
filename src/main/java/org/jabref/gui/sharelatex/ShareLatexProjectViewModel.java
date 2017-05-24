@@ -4,6 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
+/**
+ * Data class
+ * @author CS
+ *
+ */
 public class ShareLatexProjectViewModel {
 
     private final String projectId;

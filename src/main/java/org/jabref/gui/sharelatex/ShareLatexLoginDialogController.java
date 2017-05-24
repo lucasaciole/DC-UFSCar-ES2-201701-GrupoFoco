@@ -1,5 +1,8 @@
 package org.jabref.gui.sharelatex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -15,6 +18,7 @@ import com.google.gson.JsonObject;
 public class ShareLatexLoginDialogController extends AbstractController<ShareLatexLoginDialogViewModel> {
 
     private final SharelatexConnector connector = new SharelatexConnector();
+    private final List<ShareLatexProjectViewModel> projects = new ArrayList<>();
 
     @FXML private Button btnCancel;
     @FXML private Button btnLogin;
@@ -55,8 +59,18 @@ public class ShareLatexLoginDialogController extends AbstractController<ShareLat
 
                 for (JsonElement elem : projectArray) {
 
-                    System.out.println("ID " + elem.getAsJsonObject().get("id").getAsString());
-                    System.out.println("Name " + elem.getAsJsonObject().get("name").getAsString());
+                    String id = elem.getAsJsonObject().get("id").getAsString();
+                    String name = elem.getAsJsonObject().get("name").getAsString();
+                    String lastUpdated = elem.getAsJsonObject().get("lastUpdated").getAsString();
+                    String owner =  elem.getAsJsonObject().get("owner_ref").getAsString();
+                    System.out.println("ID " + id);
+                    System.out.println("Name " + name);
+                    System.out.println("LastUpdated " + lastUpdated);
+                    System.out.println("Owner" + owner);
+
+                    ShareLatexProjectViewModel model = new ShareLatexProjectViewModel(id, name, owner, lastUpdated);
+                    projects.add(model);
+                    //TODO: How do I pass this projectLIst to the other view?
                 }
 
             }
