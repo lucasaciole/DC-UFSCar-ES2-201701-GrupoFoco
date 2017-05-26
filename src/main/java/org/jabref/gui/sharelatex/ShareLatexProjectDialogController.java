@@ -1,6 +1,10 @@
 package org.jabref.gui.sharelatex;
 
 import org.jabref.gui.AbstractController;
+import org.jabref.logic.sharelatex.ShareLatexManager;
+
+import javax.inject.Inject;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -11,13 +15,14 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
     @FXML TableColumn<ShareLatexProjectViewModel, String> colOwner;
     @FXML TableColumn<ShareLatexProjectViewModel, String> colLastModified;
     @FXML TableView<ShareLatexProjectViewModel> tblProjects;
-
+    @Inject ShareLatexManager manager;
 
 
     @FXML
     private void initialize() {
 
-        viewModel = new ShareLatexProjectDialogViewModel();
+        viewModel = new ShareLatexProjectDialogViewModel(manager.getProjects());
+
         colTitle.setCellValueFactory(cellData -> cellData.getValue().getProjectTitle());
         colOwner.setCellValueFactory(cellData -> cellData.getValue().getOwner());
         colLastModified.setCellValueFactory(cellData -> cellData.getValue().getLastUpdated());

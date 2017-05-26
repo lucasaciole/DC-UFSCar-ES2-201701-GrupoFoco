@@ -1,6 +1,7 @@
 package org.jabref.logic.sharelatex;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,15 +23,17 @@ public class SharelatexConnector {
     }
 
     private final String contentType = "application/json; charset=utf-8";
-   private final JsonParser parser = new JsonParser();
+    private final JsonParser parser = new JsonParser();
+    private Map<String, String> loginCookies = new HashMap<>();
+    private String server;
+    private String loginUrl;
 
-    public JsonObject connectToServer(String server, String user, String password) {
+    public String connectToServer(String server, String user, String password) {
 
+        this.server = server;
+        this.loginUrl  = server + "/login";
         Connection.Response crsfResponse;
         try {
-
-            String loginUrl = server + "/login";
-            String projectUrl = server + "/project";
 
             crsfResponse = Jsoup.connect(loginUrl).method(Method.GET)
                     .execute();
@@ -64,37 +67,39 @@ public class SharelatexConnector {
                     String errorMessage = message.get("text").getAsString();
                     System.out.println(errorMessage);
 
-                    return message;
+                    return errorMessage;
                 }
 
             }
 
-            Map<String, String> loginCookies = loginResponse.cookies();
+            loginCookies = loginResponse.cookies();
 
-            Connection.Response projectsResponse = Jsoup.connect(projectUrl)
-                    .referrer(loginUrl).cookies(loginCookies).method(Method.GET).execute();
-
-            //  System.out.println(resProjects.body());
-
-            System.out.println("");
-            Optional<Element> scriptContent = Optional
-                    .of(projectsResponse.parse().body().getElementsByTag("script").first());
-
-
-            if (scriptContent.isPresent()) {
-
-                String data = scriptContent.get().data();
-                JsonElement jsonTree = parser.parse(data);
-
-                JsonObject obj = jsonTree.getAsJsonObject();
-
-                return obj;
-
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
+    }
+
+    public Optional<JsonObject> getProjects() throws IOException {
+        String projectUrl = server + "/project";
+        Connection.Response projectsResponse = Jsoup.connect(projectUrl)
+                .referrer(loginUrl).cookies(loginCookies).method(Method.GET).execute();
+
+        System.out.println("");
+        Optional<Element> scriptContent = Optional
+                .of(projectsResponse.parse().body().getElementsByTag("script").first());
+
+        if (scriptContent.isPresent()) {
+
+            String data = scriptContent.get().data();
+            JsonElement jsonTree = parser.parse(data);
+
+            JsonObject obj = jsonTree.getAsJsonObject();
+
+            return Optional.of(obj);
+
+        }
+        return Optional.empty();
     }
 }
 /*  for (JsonElement elem : projectArray) {
