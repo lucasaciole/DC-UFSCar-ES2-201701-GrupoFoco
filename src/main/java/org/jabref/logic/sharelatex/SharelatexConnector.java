@@ -17,11 +17,6 @@ import org.jsoup.nodes.Element;
 
 public class SharelatexConnector {
 
-    public SharelatexConnector() {
-        // TODO Auto-generated constructor stub
-
-    }
-
     private final String contentType = "application/json; charset=utf-8";
     private final JsonParser parser = new JsonParser();
     private Map<String, String> loginCookies = new HashMap<>();
@@ -31,7 +26,7 @@ public class SharelatexConnector {
     public String connectToServer(String server, String user, String password) {
 
         this.server = server;
-        this.loginUrl  = server + "/login";
+        this.loginUrl = server + "/login";
         Connection.Response crsfResponse;
         try {
 

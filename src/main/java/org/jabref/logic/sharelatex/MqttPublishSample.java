@@ -8,7 +8,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MqttPublishSample {
 
-
     public static void connect(String channel) {
 
         String topic = "MQTT Examples";
@@ -19,7 +18,6 @@ public class MqttPublishSample {
         MemoryPersistence persistence = new MemoryPersistence();
 
         try {
-
 
             MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
 

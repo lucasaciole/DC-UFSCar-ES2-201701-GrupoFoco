@@ -12,7 +12,6 @@ public class ShareLatexManagerTest {
 
     @Test
     public void test() {
-
         ShareLatexManager manager = new ShareLatexManager();
         manager.login("http://192.168.1.248", "joe@example.com", "test");
 

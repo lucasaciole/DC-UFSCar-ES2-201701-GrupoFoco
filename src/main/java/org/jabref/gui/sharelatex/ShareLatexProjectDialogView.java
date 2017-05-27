@@ -7,11 +7,8 @@ import org.jabref.gui.FXDialog;
 
 public class ShareLatexProjectDialogView extends AbstractDialogView {
 
-
-
     @Override
     public void show() {
-
         FXDialog sharelatexProjectDialog = new FXDialog(AlertType.INFORMATION, "Choose Project");
         sharelatexProjectDialog.setDialogPane((DialogPane) this.getView());
         sharelatexProjectDialog.setResizable(true);

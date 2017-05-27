@@ -20,7 +20,6 @@ public class ShareLatexManager {
 
     public List<ShareLatexProjectViewModel> getProjects() {
         try {
-
             connector.getProjects().ifPresent(jsonResponse -> {
                 if (jsonResponse.has("projects")) {
 

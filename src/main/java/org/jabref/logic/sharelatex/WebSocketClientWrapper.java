@@ -16,8 +16,6 @@ import org.glassfish.tyrus.client.ClientManager;
 
 public class WebSocketClientWrapper {
 
-    private static final String SENT_MESSAGE = "Hello_World";
-
     public static void createAndConnect(String channel) {
 
         CountDownLatch messageLatch = new CountDownLatch(1);

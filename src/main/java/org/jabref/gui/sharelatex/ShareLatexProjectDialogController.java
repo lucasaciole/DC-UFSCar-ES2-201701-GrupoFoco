@@ -17,7 +17,6 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
     @FXML TableView<ShareLatexProjectViewModel> tblProjects;
     @Inject ShareLatexManager manager;
 
-
     @FXML
     private void initialize() {
 
@@ -28,13 +27,10 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
         colLastModified.setCellValueFactory(cellData -> cellData.getValue().getLastUpdated());
         setBindings();
 
-
     }
 
     private void setBindings() {
         tblProjects.itemsProperty().bindBidirectional(viewModel.projectsProperty());
     }
-
-
 
 }
