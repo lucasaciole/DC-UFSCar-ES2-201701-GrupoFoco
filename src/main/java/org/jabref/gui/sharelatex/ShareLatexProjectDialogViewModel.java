@@ -1,27 +1,25 @@
 package org.jabref.gui.sharelatex;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 
 import org.jabref.gui.AbstractViewModel;
+import org.jabref.model.sharelatex.ShareLatexProject;
 
 public class ShareLatexProjectDialogViewModel extends AbstractViewModel {
 
     private final SimpleListProperty<ShareLatexProjectViewModel> projects = new SimpleListProperty<>(
             FXCollections.observableArrayList());
 
-    public ShareLatexProjectDialogViewModel(List<ShareLatexProjectViewModel> projects) {
-        this.projects.addAll(projects);
+    public void addProjects(List<ShareLatexProject> projectsToAdd) {
+        this.projects.addAll(projectsToAdd.stream().map(ShareLatexProjectViewModel::new).collect(Collectors.toList()));
     }
 
     public SimpleListProperty<ShareLatexProjectViewModel> projectsProperty() {
         return this.projects;
-    }
-
-    public ShareLatexProjectDialogViewModel() {
-        // TODO Auto-generated constructor stub
     }
 
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jabref.gui.sharelatex.ShareLatexProjectViewModel;
+import org.jabref.model.sharelatex.ShareLatexProject;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,13 +12,13 @@ import com.google.gson.JsonElement;
 public class ShareLatexManager {
 
     private final SharelatexConnector connector = new SharelatexConnector();
-    private final List<ShareLatexProjectViewModel> projects = new ArrayList<>();
+    private final List<ShareLatexProject> projects = new ArrayList<>();
 
     public String login(String server, String username, String password) {
         return connector.connectToServer(server, username, password);
     }
 
-    public List<ShareLatexProjectViewModel> getProjects() {
+    public List<ShareLatexProject> getProjects() {
         try {
             connector.getProjects().ifPresent(jsonResponse -> {
                 if (jsonResponse.has("projects")) {
@@ -38,8 +38,8 @@ public class ShareLatexManager {
                         System.out.println("LastUpdated " + lastUpdated);
                         System.out.println("Owner" + owner);
 
-                        ShareLatexProjectViewModel model = new ShareLatexProjectViewModel(id, name, owner, lastUpdated);
-                        projects.add(model);
+                        ShareLatexProject project = new ShareLatexProject(id, name, owner, lastUpdated);
+                        projects.add(project);
                         //TODO: How do I pass this projectLIst to the other view?
                     }
 

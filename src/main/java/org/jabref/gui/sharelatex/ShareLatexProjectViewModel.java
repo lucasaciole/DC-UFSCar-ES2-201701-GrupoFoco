@@ -3,6 +3,8 @@ package org.jabref.gui.sharelatex;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import org.jabref.model.sharelatex.ShareLatexProject;
+
 /**
  * Data class
  * @author CS
@@ -15,12 +17,12 @@ public class ShareLatexProjectViewModel {
     private final StringProperty owner;
     private final StringProperty lastUpdated;
 
-    public ShareLatexProjectViewModel(String projectId, String projectTitle, String owner, String lastUpdated) {
+    public ShareLatexProjectViewModel(ShareLatexProject project) {
 
-        this.projectId = projectId;
-        this.projectTitle = new SimpleStringProperty(projectTitle);
-        this.owner = new SimpleStringProperty(owner);
-        this.lastUpdated = new SimpleStringProperty(lastUpdated);
+        this.projectId = project.getProjectId();
+        this.projectTitle = new SimpleStringProperty(project.getProjectTitle());
+        this.owner = new SimpleStringProperty(project.getOwner());
+        this.lastUpdated = new SimpleStringProperty(project.getLastUpdated());
 
     }
 
