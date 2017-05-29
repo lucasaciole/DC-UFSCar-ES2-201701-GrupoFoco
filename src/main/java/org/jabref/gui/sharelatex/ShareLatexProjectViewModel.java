@@ -1,5 +1,7 @@
 package org.jabref.gui.sharelatex;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -12,6 +14,7 @@ import org.jabref.model.sharelatex.ShareLatexProject;
  */
 public class ShareLatexProjectViewModel {
 
+    private final SimpleBooleanProperty active = new SimpleBooleanProperty();
     private final String projectId;
     private final StringProperty projectTitle;
     private final StringProperty owner;
@@ -23,7 +26,6 @@ public class ShareLatexProjectViewModel {
         this.projectTitle = new SimpleStringProperty(project.getProjectTitle());
         this.owner = new SimpleStringProperty(project.getOwner());
         this.lastUpdated = new SimpleStringProperty(project.getLastUpdated());
-
     }
 
     public String getProjectId() {
@@ -40,5 +42,13 @@ public class ShareLatexProjectViewModel {
 
     public StringProperty getLastUpdated() {
         return lastUpdated;
+    }
+
+    public BooleanProperty isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active.set(active);
     }
 }

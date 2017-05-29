@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
 
 <DialogPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jabref.gui.sharelatex.ShareLatexProjectDialogController">
    <content>
-      <TableView fx:id="tblProjects">
-        <columns>
-          <TableColumn fx:id="colTitle" prefWidth="75.0" text="Title" />
-          <TableColumn fx:id="colOwner" prefWidth="75.0" text="Owner" />
-            <TableColumn fx:id="colLastModified" prefWidth="75.0" text="Last modified" />
-        </columns>
-      </TableView>
+      <VBox>
+         <children>
+            <TableView fx:id="tblProjects">
+              <columns>
+                  <TableColumn fx:id="activeProject" prefWidth="75.0" text="Active" />
+                <TableColumn fx:id="colTitle" prefWidth="75.0" text="Title" />
+                <TableColumn fx:id="colOwner" prefWidth="75.0" text="Owner" />
+                  <TableColumn fx:id="colLastModified" prefWidth="75.0" text="Last modified" />
+              </columns>
+            </TableView>
+            <ButtonBar minWidth="-Infinity">
+              <buttons>
+                <Button fx:id="btnSync" mnemonicParsing="false" onAction="#synchronizeLibrary" text="Synchronize Library" />
+                  <Button mnemonicParsing="false" text="Button" />
+              </buttons>
+            </ButtonBar>
+         </children>
+      </VBox>
    </content>
 </DialogPane>

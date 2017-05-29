@@ -11,6 +11,7 @@ import org.jabref.logic.sharelatex.ShareLatexManager;
 
 public class ShareLatexProjectDialogController extends AbstractController<ShareLatexProjectDialogViewModel> {
 
+    @FXML private TableColumn<ShareLatexProjectViewModel, Boolean> colActive;
     @FXML private TableColumn<ShareLatexProjectViewModel, String> colTitle;
     @FXML private TableColumn<ShareLatexProjectViewModel, String> colOwner;
     @FXML private TableColumn<ShareLatexProjectViewModel, String> colLastModified;
@@ -22,6 +23,7 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
         viewModel = new ShareLatexProjectDialogViewModel();
         viewModel.addProjects(manager.getProjects());
 
+        colActive.setCellValueFactory(cellData -> cellData.getValue().isActive());
         colTitle.setCellValueFactory(cellData -> cellData.getValue().getProjectTitle());
         colOwner.setCellValueFactory(cellData -> cellData.getValue().getOwner());
         colLastModified.setCellValueFactory(cellData -> cellData.getValue().getLastUpdated());
@@ -31,6 +33,11 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
 
     private void setBindings() {
         tblProjects.itemsProperty().bindBidirectional(viewModel.projectsProperty());
+    }
+
+    @FXML
+    private void synchronizeLibrary() {
+        //todo
     }
 
 }
