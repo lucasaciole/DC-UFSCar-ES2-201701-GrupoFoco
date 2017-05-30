@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 
 import org.jabref.gui.AbstractController;
+import org.jabref.gui.StateManager;
 import org.jabref.logic.sharelatex.ShareLatexManager;
 
 public class ShareLatexProjectDialogController extends AbstractController<ShareLatexProjectDialogViewModel> {
@@ -20,10 +21,11 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
     @FXML private TableColumn<ShareLatexProjectViewModel, String> colLastModified;
     @FXML private TableView<ShareLatexProjectViewModel> tblProjects;
     @Inject private ShareLatexManager manager;
+    @Inject private StateManager stateManager;
 
     @FXML
     private void initialize() {
-        viewModel = new ShareLatexProjectDialogViewModel();
+        viewModel = new ShareLatexProjectDialogViewModel(stateManager);
         try {
             viewModel.addProjects(manager.getProjects());
         } catch (IOException e) {
@@ -53,6 +55,15 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
 
         viewModel.projectsProperty().filtered(x -> x.isActive())
                 .forEach(item -> System.out.println(item.getProjectTitle()));
+        String projectId = "";
+
+        stateManager.getActiveDatabase()
+                .ifPresent(database -> manager.uploadLibrary(projectId, database)
+);
     }
 
+    @FXML
+    private void cancelAndClose() {
+        getStage().close();
+    }
 }

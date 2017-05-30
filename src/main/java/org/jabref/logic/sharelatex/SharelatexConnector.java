@@ -1,6 +1,9 @@
 package org.jabref.logic.sharelatex;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +25,8 @@ public class SharelatexConnector {
     private Map<String, String> loginCookies = new HashMap<>();
     private String server;
     private String loginUrl;
+    private String csrfToken;
+    private String projectUrl;
 
     public String connectToServer(String server, String user, String password) throws IOException {
 
@@ -35,9 +40,9 @@ public class SharelatexConnector {
         Document welcomePage = crsfResponse.parse();
         Map<String, String> welcomCookies = crsfResponse.cookies();
 
-        String securityTokenValue = welcomePage.select("input[name=_csrf]").attr("value");
+        csrfToken = welcomePage.select("input[name=_csrf]").attr("value");
 
-        String json = "{\"_csrf\":" + JSONObject.quote(securityTokenValue)
+        String json = "{\"_csrf\":" + JSONObject.quote(csrfToken)
                 + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(password) + "}";
 
         Connection.Response loginResponse = Jsoup.connect(loginUrl)
@@ -72,13 +77,15 @@ public class SharelatexConnector {
     }
 
     public Optional<JsonObject> getProjects() throws IOException {
-        String projectUrl = server + "/project";
+        projectUrl = server + "/project";
         Connection.Response projectsResponse = Jsoup.connect(projectUrl)
                 .referrer(loginUrl).cookies(loginCookies).method(Method.GET).execute();
 
         System.out.println("");
+
+
         Optional<Element> scriptContent = Optional
-                .of(projectsResponse.parse().body().getElementsByTag("script").first());
+                .of(projectsResponse.parse().select("script#data").first());
 
         if (scriptContent.isPresent()) {
 
@@ -91,6 +98,30 @@ public class SharelatexConnector {
 
         }
         return Optional.empty();
+    }
+
+    public void uploadFile(String projectId, Path path) {
+
+        String activeProject = projectUrl + "/" + projectId + "/upload";
+        InputStream str;
+        try {
+            str = Files.newInputStream(path);
+
+        Connection.Response fileResp = Jsoup.connect(activeProject).cookies(loginCookies)
+                    .data("_csrf", csrfToken).data("folder_id", projectId)
+                    .data("qqtotalfilesize", Long.toString(Files.size(path)))
+                    .data("qquuid", "0")
+                    .data("qqfile", path.getFileName().toString(), str)
+                    .ignoreContentType(true)
+                .method(Method.POST).cookies(loginCookies).execute();
+            //TOD: Investigate why they also get send as multipart form request
+            System.out.println(fileResp.body());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // TODO Auto-generated method stub
+
     }
 }
 /*  for (JsonElement elem : projectArray) {

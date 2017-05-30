@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.sharelatex.ShareLatexProject;
 
 import com.google.gson.JsonArray;
@@ -46,5 +47,15 @@ public class ShareLatexManager {
         });
 
         return projects;
+    }
+
+    public void uploadLibrary(String projectId, BibDatabaseContext database) {
+
+        //TODO: Not yet implemented
+        if(database.getDatabasePath().isPresent())
+        {
+            // connector.uploadFile(projectId, database.getDatabasePath().get());
+
+        }
     }
 }

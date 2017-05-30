@@ -21,8 +21,8 @@
             </TableView>
             <ButtonBar minWidth="-Infinity">
               <buttons>
-                <Button fx:id="btnSync" mnemonicParsing="false" onAction="#synchronizeLibrary" text="Synchronize Library" />
-                  <Button mnemonicParsing="false" text="Button" />
+                <Button fx:id="btnSync" defaultButton="true" mnemonicParsing="false" onAction="#synchronizeLibrary" text="Synchronize Library" />
+                  <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#cancelAndClose" text="Cancel" />
               </buttons>
             </ButtonBar>
          </children>
