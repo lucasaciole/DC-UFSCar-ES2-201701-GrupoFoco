@@ -23,55 +23,51 @@ public class SharelatexConnector {
     private String server;
     private String loginUrl;
 
-    public String connectToServer(String server, String user, String password) {
+    public String connectToServer(String server, String user, String password) throws IOException {
 
         this.server = server;
         this.loginUrl = server + "/login";
         Connection.Response crsfResponse;
-        try {
 
-            crsfResponse = Jsoup.connect(loginUrl).method(Method.GET)
-                    .execute();
+        crsfResponse = Jsoup.connect(loginUrl).method(Method.GET)
+                .execute();
 
-            Document welcomePage = crsfResponse.parse();
-            Map<String, String> welcomCookies = crsfResponse.cookies();
+        Document welcomePage = crsfResponse.parse();
+        Map<String, String> welcomCookies = crsfResponse.cookies();
 
-            String securityTokenValue = welcomePage.select("input[name=_csrf]").attr("value");
+        String securityTokenValue = welcomePage.select("input[name=_csrf]").attr("value");
 
-            String json = "{\"_csrf\":" + JSONObject.quote(securityTokenValue)
-                    + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(password) + "}";
+        String json = "{\"_csrf\":" + JSONObject.quote(securityTokenValue)
+                + ",\"email\":" + JSONObject.quote(user) + ",\"password\":" + JSONObject.quote(password) + "}";
 
-            Connection.Response loginResponse = Jsoup.connect(loginUrl)
-                    .header("Content-Type", contentType)
-                    .header("Accept", "application/json, text/plain, */*")
-                    .cookies(welcomCookies)
-                    .method(Method.POST)
-                    .requestBody(json)
-                    .followRedirects(true)
-                    .ignoreContentType(true)
-                    .execute();
+        Connection.Response loginResponse = Jsoup.connect(loginUrl)
+                .header("Content-Type", contentType)
+                .header("Accept", "application/json, text/plain, */*")
+                .cookies(welcomCookies)
+                .method(Method.POST)
+                .requestBody(json)
+                .followRedirects(true)
+                .ignoreContentType(true)
+                .execute();
 
-            System.out.println(loginResponse.body());
-            ///Error handling block
-            if (contentType.equals(loginResponse.contentType())) {
+        System.out.println(loginResponse.body());
+        ///Error handling block
+        if (contentType.equals(loginResponse.contentType())) {
 
-                if (loginResponse.body().contains("message")) {
-                    JsonElement jsonTree = parser.parse(loginResponse.body());
-                    JsonObject obj = jsonTree.getAsJsonObject();
-                    JsonObject message = obj.get("message").getAsJsonObject();
-                    String errorMessage = message.get("text").getAsString();
-                    System.out.println(errorMessage);
+            if (loginResponse.body().contains("message")) {
+                JsonElement jsonTree = parser.parse(loginResponse.body());
+                JsonObject obj = jsonTree.getAsJsonObject();
+                JsonObject message = obj.get("message").getAsJsonObject();
+                String errorMessage = message.get("text").getAsString();
+                System.out.println(errorMessage);
 
-                    return errorMessage;
-                }
-
+                return errorMessage;
             }
 
-            loginCookies = loginResponse.cookies();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        loginCookies = loginResponse.cookies();
+
         return "";
     }
 

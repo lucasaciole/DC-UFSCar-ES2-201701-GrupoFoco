@@ -13,7 +13,7 @@
          <children>
             <TableView fx:id="tblProjects">
               <columns>
-                  <TableColumn fx:id="activeProject" prefWidth="75.0" text="Active" />
+                  <TableColumn fx:id="colActive" prefWidth="75.0" text="Active" />
                 <TableColumn fx:id="colTitle" prefWidth="75.0" text="Title" />
                 <TableColumn fx:id="colOwner" prefWidth="75.0" text="Owner" />
                   <TableColumn fx:id="colLastModified" prefWidth="75.0" text="Last modified" />

@@ -14,41 +14,37 @@ public class ShareLatexManager {
     private final SharelatexConnector connector = new SharelatexConnector();
     private final List<ShareLatexProject> projects = new ArrayList<>();
 
-    public String login(String server, String username, String password) {
+    public String login(String server, String username, String password) throws IOException {
         return connector.connectToServer(server, username, password);
     }
 
-    public List<ShareLatexProject> getProjects() {
-        try {
-            connector.getProjects().ifPresent(jsonResponse -> {
-                if (jsonResponse.has("projects")) {
+    public List<ShareLatexProject> getProjects() throws IOException {
 
-                    JsonArray projectArray = jsonResponse.get("projects").getAsJsonArray();
+        connector.getProjects().ifPresent(jsonResponse -> {
+            if (jsonResponse.has("projects")) {
 
-                    System.out.println(projectArray);
+                JsonArray projectArray = jsonResponse.get("projects").getAsJsonArray();
 
-                    for (JsonElement elem : projectArray) {
+                System.out.println(projectArray);
+                for (JsonElement elem : projectArray) {
 
-                        String id = elem.getAsJsonObject().get("id").getAsString();
-                        String name = elem.getAsJsonObject().get("name").getAsString();
-                        String lastUpdated = elem.getAsJsonObject().get("lastUpdated").getAsString();
-                        String owner = elem.getAsJsonObject().get("owner_ref").getAsString();
-                        System.out.println("ID " + id);
-                        System.out.println("Name " + name);
-                        System.out.println("LastUpdated " + lastUpdated);
-                        System.out.println("Owner" + owner);
+                    String id = elem.getAsJsonObject().get("id").getAsString();
+                    String name = elem.getAsJsonObject().get("name").getAsString();
+                    String lastUpdated = elem.getAsJsonObject().get("lastUpdated").getAsString();
+                    String owner = elem.getAsJsonObject().get("owner_ref").getAsString();
+                    System.out.println("ID " + id);
+                    System.out.println("Name " + name);
+                    System.out.println("LastUpdated " + lastUpdated);
+                    System.out.println("Owner" + owner);
 
-                        ShareLatexProject project = new ShareLatexProject(id, name, owner, lastUpdated);
-                        projects.add(project);
-                        //TODO: How do I pass this projectLIst to the other view?
-                    }
-
+                    ShareLatexProject project = new ShareLatexProject(id, name, owner, lastUpdated);
+                    projects.add(project);
+                    //TODO: How do I pass this projectLIst to the other view?
                 }
-            });
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+            }
+        });
+
         return projects;
     }
 }

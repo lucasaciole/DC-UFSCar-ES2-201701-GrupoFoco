@@ -14,7 +14,7 @@ import org.jabref.model.sharelatex.ShareLatexProject;
  */
 public class ShareLatexProjectViewModel {
 
-    private final SimpleBooleanProperty active = new SimpleBooleanProperty();
+    private final SimpleBooleanProperty active = new SimpleBooleanProperty(false);
     private final String projectId;
     private final StringProperty projectTitle;
     private final StringProperty owner;
@@ -44,7 +44,11 @@ public class ShareLatexProjectViewModel {
         return lastUpdated;
     }
 
-    public BooleanProperty isActive() {
+    public Boolean isActive() {
+        return active.getValue();
+    }
+
+    public BooleanProperty isActiveProperty() {
         return active;
     }
 

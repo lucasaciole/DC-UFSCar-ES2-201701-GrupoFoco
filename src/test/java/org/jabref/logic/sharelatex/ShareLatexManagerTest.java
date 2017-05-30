@@ -1,5 +1,6 @@
 package org.jabref.logic.sharelatex;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.jabref.model.sharelatex.ShareLatexProject;
@@ -12,10 +13,18 @@ public class ShareLatexManagerTest {
 
     @Test
     public void test() {
-        ShareLatexManager manager = new ShareLatexManager();
-        manager.login("http://192.168.1.248", "joe@example.com", "test");
 
-        List<ShareLatexProject> projects = manager.getProjects();
-        assertFalse(projects.isEmpty());
+        List<ShareLatexProject> projects;
+        try {
+            ShareLatexManager manager = new ShareLatexManager();
+            manager.login("http://192.168.1.248", "joe@example.com", "test");
+
+            projects = manager.getProjects();
+            assertFalse(projects.isEmpty());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 }

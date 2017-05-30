@@ -1,10 +1,13 @@
 package org.jabref.gui.sharelatex;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 
 import org.jabref.gui.AbstractController;
 import org.jabref.logic.sharelatex.ShareLatexManager;
@@ -21,9 +24,19 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
     @FXML
     private void initialize() {
         viewModel = new ShareLatexProjectDialogViewModel();
-        viewModel.addProjects(manager.getProjects());
+        try {
+            viewModel.addProjects(manager.getProjects());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        colActive.setCellValueFactory(cellData -> cellData.getValue().isActive());
+        tblProjects.setEditable(true);
+        colActive.setEditable(true);
+
+        colActive.setCellFactory(CheckBoxTableCell.forTableColumn(colActive));
+
+        colActive.setCellValueFactory(cellData -> cellData.getValue().isActiveProperty());
         colTitle.setCellValueFactory(cellData -> cellData.getValue().getProjectTitle());
         colOwner.setCellValueFactory(cellData -> cellData.getValue().getOwner());
         colLastModified.setCellValueFactory(cellData -> cellData.getValue().getLastUpdated());
@@ -37,7 +50,9 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
 
     @FXML
     private void synchronizeLibrary() {
-        //todo
+
+        viewModel.projectsProperty().filtered(x -> x.isActive())
+                .forEach(item -> System.out.println(item.getProjectTitle()));
     }
 
 }

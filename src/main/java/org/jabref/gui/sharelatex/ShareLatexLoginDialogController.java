@@ -1,5 +1,7 @@
 package org.jabref.gui.sharelatex;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import javafx.fxml.FXML;
@@ -35,14 +37,22 @@ public class ShareLatexLoginDialogController extends AbstractController<ShareLat
         System.out.println(tbUsername.getText());
         System.out.println(pfPassword.getText());
 
-        String result = manager.login(tbAddress.getText(), tbUsername.getText(), pfPassword.getText());
-        if (result.contains("incorrect")) {
+        String result;
+        try {
+            result = manager.login(tbAddress.getText(), tbUsername.getText(), pfPassword.getText());
+            if (result.contains("incorrect")) {
+                FXDialog dlg = new FXDialog(AlertType.ERROR);
+                dlg.setContentText("Your email or password is incorrect. Please try again");
+                dlg.showAndWait();
+            } else {
+                ShareLatexProjectDialogView dlgprojects = new ShareLatexProjectDialogView();
+                dlgprojects.show();
+            }
+        } catch (IOException e) {
             FXDialog dlg = new FXDialog(AlertType.ERROR);
-            dlg.setContentText("Your email or password is incorrect. Please try again");
+            dlg.setContentText(e.getMessage());
             dlg.showAndWait();
-        } else {
-            ShareLatexProjectDialogView dlgprojects = new ShareLatexProjectDialogView();
-            dlgprojects.show();
+
         }
 
     }
