@@ -29,7 +29,6 @@ public class SharelatexConnector {
     private String csrfToken;
     private String projectUrl;
 
-
     public String connectToServer(String server, String user, String password) throws IOException {
 
         this.server = server;
@@ -103,6 +102,19 @@ public class SharelatexConnector {
     }
 
     public void uploadFile(String projectId, Path path) {
+        /*
+            //this is a version 4 UUID
+            qq.getUniqueId = function(){
+                "use strict";
+
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                 //   jslint eqeq: true, bitwise: true
+                    var r = (Math.random()*16)|0, v = c == 'x' ? r : ((r&0x3)|0x8);
+                    return v.toString(16);
+                });};
+         */
+        //window.csrfToken
+        //https://github.com/sharelatex/web-sharelatex/blob/2fbc796a728871fd536487eda6cd75cf1079f913/test/UnitTests/coffee/Uploads/ProjectUploadControllerTests.coffee
 
         String activeProject = projectUrl + "/" + projectId + "/upload";
         InputStream str;
@@ -112,7 +124,6 @@ public class SharelatexConnector {
             Connection.Response fileResp = Jsoup.connect(activeProject).cookies(loginCookies)
                     .data("_csrf", csrfToken).data("folder_id", projectId)
                     .data("qqtotalfilesize", Long.toString(Files.size(path)))
-                    .data("qquuid", "0")
                     .data("qqfile", path.getFileName().toString(), str)
                     .ignoreContentType(true)
                     .method(Method.POST).cookies(loginCookies).execute();
@@ -122,8 +133,6 @@ public class SharelatexConnector {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // TODO Auto-generated method stub
-
     }
 }
 /*  for (JsonElement elem : projectArray) {

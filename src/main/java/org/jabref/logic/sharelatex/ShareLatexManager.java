@@ -23,9 +23,7 @@ public class ShareLatexManager {
 
         connector.getProjects().ifPresent(jsonResponse -> {
             if (jsonResponse.has("projects")) {
-
                 JsonArray projectArray = jsonResponse.get("projects").getAsJsonArray();
-
                 System.out.println(projectArray);
                 for (JsonElement elem : projectArray) {
 
@@ -45,7 +43,6 @@ public class ShareLatexManager {
 
             }
         });
-
         return projects;
     }
 
