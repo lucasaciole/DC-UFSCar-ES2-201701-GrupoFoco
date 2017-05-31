@@ -22,11 +22,13 @@ public class SharelatexConnector {
 
     private final String contentType = "application/json; charset=utf-8";
     private final JsonParser parser = new JsonParser();
+    private final String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
     private Map<String, String> loginCookies = new HashMap<>();
     private String server;
     private String loginUrl;
     private String csrfToken;
     private String projectUrl;
+
 
     public String connectToServer(String server, String user, String password) throws IOException {
 
@@ -53,6 +55,7 @@ public class SharelatexConnector {
                 .requestBody(json)
                 .followRedirects(true)
                 .ignoreContentType(true)
+                .userAgent(userAgent)
                 .execute();
 
         System.out.println(loginResponse.body());
@@ -79,7 +82,7 @@ public class SharelatexConnector {
     public Optional<JsonObject> getProjects() throws IOException {
         projectUrl = server + "/project";
         Connection.Response projectsResponse = Jsoup.connect(projectUrl)
-                .referrer(loginUrl).cookies(loginCookies).method(Method.GET).execute();
+                .referrer(loginUrl).cookies(loginCookies).method(Method.GET).userAgent(userAgent).execute();
 
         System.out.println("");
 
