@@ -58,8 +58,7 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
         String projectId = "";
 
         stateManager.getActiveDatabase()
-                .ifPresent(database -> manager.uploadLibrary(projectId, database)
-);
+                .ifPresent(database -> manager.uploadLibrary(projectId, database));
     }
 
     @FXML

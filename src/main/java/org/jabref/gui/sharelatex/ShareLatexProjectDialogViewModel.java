@@ -16,7 +16,7 @@ public class ShareLatexProjectDialogViewModel extends AbstractViewModel {
             FXCollections.observableArrayList());
 
     public ShareLatexProjectDialogViewModel(StateManager stateManager) {
-
+        //todo currently unused
     }
 
     public void addProjects(List<ShareLatexProject> projectsToAdd) {

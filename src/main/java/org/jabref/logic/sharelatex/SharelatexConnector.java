@@ -83,7 +83,6 @@ public class SharelatexConnector {
 
         System.out.println("");
 
-
         Optional<Element> scriptContent = Optional
                 .of(projectsResponse.parse().select("script#data").first());
 
@@ -107,13 +106,13 @@ public class SharelatexConnector {
         try {
             str = Files.newInputStream(path);
 
-        Connection.Response fileResp = Jsoup.connect(activeProject).cookies(loginCookies)
+            Connection.Response fileResp = Jsoup.connect(activeProject).cookies(loginCookies)
                     .data("_csrf", csrfToken).data("folder_id", projectId)
                     .data("qqtotalfilesize", Long.toString(Files.size(path)))
                     .data("qquuid", "0")
                     .data("qqfile", path.getFileName().toString(), str)
                     .ignoreContentType(true)
-                .method(Method.POST).cookies(loginCookies).execute();
+                    .method(Method.POST).cookies(loginCookies).execute();
             //TOD: Investigate why they also get send as multipart form request
             System.out.println(fileResp.body());
         } catch (IOException e) {

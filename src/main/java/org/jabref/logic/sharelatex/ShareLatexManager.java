@@ -52,8 +52,8 @@ public class ShareLatexManager {
     public void uploadLibrary(String projectId, BibDatabaseContext database) {
 
         //TODO: Not yet implemented
-        if(database.getDatabasePath().isPresent())
-        {
+        if (database.getDatabasePath().isPresent()) {
+
             // connector.uploadFile(projectId, database.getDatabasePath().get());
 
         }
