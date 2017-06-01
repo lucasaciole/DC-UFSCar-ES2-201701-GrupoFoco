@@ -19,6 +19,8 @@ public class ShareLatexManagerTest {
             ShareLatexManager manager = new ShareLatexManager();
             manager.login("http://192.168.1.248", "joe@example.com", "test");
 
+            //  manager.login("https://www.sharelatex.com", "email ", "password" );
+
             projects = manager.getProjects();
             assertFalse(projects.isEmpty());
         } catch (IOException e) {

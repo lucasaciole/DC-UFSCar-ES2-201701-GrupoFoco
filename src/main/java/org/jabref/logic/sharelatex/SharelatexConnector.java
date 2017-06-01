@@ -22,6 +22,7 @@ public class SharelatexConnector {
 
     private final String contentType = "application/json; charset=utf-8";
     private final JsonParser parser = new JsonParser();
+    private final String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0";
     private Map<String, String> loginCookies = new HashMap<>();
     private String server;
     private String loginUrl;
@@ -53,6 +54,7 @@ public class SharelatexConnector {
                 .requestBody(json)
                 .followRedirects(true)
                 .ignoreContentType(true)
+                .userAgent(userAgent)
                 .execute();
 
         System.out.println(loginResponse.body());
@@ -79,7 +81,7 @@ public class SharelatexConnector {
     public Optional<JsonObject> getProjects() throws IOException {
         projectUrl = server + "/project";
         Connection.Response projectsResponse = Jsoup.connect(projectUrl)
-                .referrer(loginUrl).cookies(loginCookies).method(Method.GET).execute();
+                .referrer(loginUrl).cookies(loginCookies).method(Method.GET).userAgent(userAgent).execute();
 
         System.out.println("");
 
@@ -100,6 +102,19 @@ public class SharelatexConnector {
     }
 
     public void uploadFile(String projectId, Path path) {
+        /*
+            //this is a version 4 UUID
+            qq.getUniqueId = function(){
+                "use strict";
+
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                 //   jslint eqeq: true, bitwise: true
+                    var r = (Math.random()*16)|0, v = c == 'x' ? r : ((r&0x3)|0x8);
+                    return v.toString(16);
+                });};
+         */
+        //window.csrfToken
+        //https://github.com/sharelatex/web-sharelatex/blob/2fbc796a728871fd536487eda6cd75cf1079f913/test/UnitTests/coffee/Uploads/ProjectUploadControllerTests.coffee
 
         String activeProject = projectUrl + "/" + projectId + "/upload";
         InputStream str;
