@@ -83,7 +83,6 @@ public class SharelatexConnector {
 
         System.out.println("");
 
-
         Optional<Element> scriptContent = Optional
                 .of(projectsResponse.parse().select("script#data").first());
 
@@ -105,15 +104,19 @@ public class SharelatexConnector {
         String activeProject = projectUrl + "/" + projectId + "/upload";
         InputStream str;
         try {
+            String urlWithParms = activeProject + "?folder_id=" + projectId + "&_csrf=" + csrfToken
+                    + "&qquuid=a71abbbe-d4ba-4918-b52e-b2b4221851e7" + "&qqtotalfilesize="
+                    + Long.toString(Files.size(path));
+
             str = Files.newInputStream(path);
 
-        Connection.Response fileResp = Jsoup.connect(activeProject).cookies(loginCookies)
-                    .data("_csrf", csrfToken).data("folder_id", projectId)
-                    .data("qqtotalfilesize", Long.toString(Files.size(path)))
-                    .data("qquuid", "0")
+            Connection.Response fileResp = Jsoup.connect(urlWithParms).cookies(loginCookies)
+                    .header("Host", "192.168.1.248")
+                    .header("Accept", "*/*")
                     .data("qqfile", path.getFileName().toString(), str)
-                    .ignoreContentType(true)
-                .method(Method.POST).cookies(loginCookies).execute();
+                    .cookies(loginCookies).ignoreContentType(true)
+                    .method(Method.POST).execute();
+
             //TOD: Investigate why they also get send as multipart form request
             System.out.println(fileResp.body());
         } catch (IOException e) {
@@ -122,8 +125,47 @@ public class SharelatexConnector {
         }
         // TODO Auto-generated method stub
 
+        /*
+        try {
+
+
+            //  System.out.println(loginCookies);
+            loginCookies.forEach((x, y) -> System.out.println(x + " " + y));
+
+
+
+            BasicCookieStore cookieStore = new BasicCookieStore();
+            BasicClientCookie cookie = new BasicClientCookie("sharelatex.sid", loginCookies.get("sharelatex.sid"));
+            cookie.setDomain("*.192.168.1.248");
+            cookie.setPath("/");
+            cookieStore.addCookie(cookie);
+
+
+            CloseableHttpClient client = HttpClients.custom().setDefaultCookieStore(cookieStore)
+                    .setDefaultRequestConfig(RequestConfig).build();
+
+            HttpPost httpPost = new HttpPost(urlWithParms);
+
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addBinaryBody("qqfile", path.toFile(),
+                    ContentType.APPLICATION_OCTET_STREAM, path.getFileName().toString());
+
+            HttpEntity multipart = builder.build();
+            httpPost.setEntity(multipart);
+
+
+            CloseableHttpResponse response = client.execute(httpPost);
+            System.out.println(EntityUtils.toString(response.getEntity()));
+            client.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        */
+
     }
 }
+
 /*  for (JsonElement elem : projectArray) {
 
       System.out.println("ID " + elem.getAsJsonObject().get("id").getAsString());
