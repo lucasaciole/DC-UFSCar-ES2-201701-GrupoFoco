@@ -102,7 +102,66 @@ public class SharelatexConnector {
     }
 
     public void uploadFile(String projectId, Path path) {
-        /*
+        String activeProject = projectUrl + "/" + projectId;
+        String uploadUrl = activeProject + "/upload";
+
+        try {
+            InputStream str;
+
+            String urlWithParms = uploadUrl + "?folder_id=" + projectId + "&_csrf=" + csrfToken
+                    + "&qquuid=28774ed2-ae25-44f1-9388-c78f1c6b8286" + "&qqtotalfilesize="
+                    + Long.toString(Files.size(path));
+
+            str = Files.newInputStream(path);
+
+            Connection.Response fileResp = Jsoup.connect(urlWithParms).cookies(loginCookies)
+                    .header("Host", "192.168.1.248")
+                    .header("Accept", "*/*")
+                    .header("Accept-Language", "Accept-Language: de,en-US;q=0.7,en;q=0.3")
+                    .header("Accept-Encoding", "gzip, deflate")
+                    .header("X-Requested-With", "XMLHttpRequest")
+                    .header("Cache-Control", "no-cache")
+                    .data("qqfile", path.getFileName().toString(), str)
+                    .cookies(loginCookies).ignoreContentType(true)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0")
+                    .method(Method.POST).execute();
+
+            //TOD: Investigate why they also get send as multipart form request
+            System.out.println(fileResp.body());
+
+            /*         WebClient webClient = new WebClient();
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            webClient.getOptions().setCssEnabled(false);
+            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+            webClient.getCookieManager()
+                    .addCookie(new Cookie("192.168.1.248", "sharelatex.sid", loginCookies.get("sharelatex.sid")));
+
+            HtmlPage p = webClient.getPage(activeProject);
+
+            Optional<HtmlAnchor> anchor = p.getAnchors().stream()
+                    .filter(a -> a.getAttribute("ng-click").equals("openUploadFileModal()")).findFirst();
+
+            anchor.ifPresent(x -> {
+                HtmlPage uploadPage;
+                try {
+                    uploadPage = x.click();
+                    webClient.waitForBackgroundJavaScript(10000);
+                    System.out.println(uploadPage.getWebResponse().getContentAsString());
+                    System.out.println(uploadPage.getElementByName("file"));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+            webClient.close();
+                 } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+                 }
+
+
             //this is a version 4 UUID
             qq.getUniqueId = function(){
                 "use strict";
@@ -112,36 +171,14 @@ public class SharelatexConnector {
                     var r = (Math.random()*16)|0, v = c == 'x' ? r : ((r&0x3)|0x8);
                     return v.toString(16);
                 });};
-         */
-        //window.csrfToken
-        //https://github.com/sharelatex/web-sharelatex/blob/2fbc796a728871fd536487eda6cd75cf1079f913/test/UnitTests/coffee/Uploads/ProjectUploadControllerTests.coffee
+                  */
+            //window.csrfToken
+            //https://github.com/sharelatex/web-sharelatex/blob/2fbc796a728871fd536487eda6cd75cf1079f913/test/UnitTests/coffee/Uploads/ProjectUploadControllerTests.coffee
 
-        String activeProject = projectUrl + "/" + projectId + "/upload";
-        InputStream str;
-        try {
-            String urlWithParms = activeProject + "?folder_id=" + projectId + "&_csrf=" + csrfToken
-                    + "&qquuid=a71abbbe-d4ba-4918-b52e-b2b4221851e7" + "&qqtotalfilesize="
-                    + Long.toString(Files.size(path));
+            // TODO Auto-generated method stub
 
-            str = Files.newInputStream(path);
-
-            Connection.Response fileResp = Jsoup.connect(urlWithParms).cookies(loginCookies)
-                    .header("Host", "192.168.1.248")
-                    .header("Accept", "*/*")
-                    .data("qqfile", path.getFileName().toString(), str)
-                    .cookies(loginCookies).ignoreContentType(true)
-                    .method(Method.POST).execute();
-
-            //TOD: Investigate why they also get send as multipart form request
-            System.out.println(fileResp.body());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // TODO Auto-generated method stub
-
-        /*
-        try {
+            /*
+            try {
 
 
             //  System.out.println(loginCookies);
@@ -172,12 +209,15 @@ public class SharelatexConnector {
             CloseableHttpResponse response = client.execute(httpPost);
             System.out.println(EntityUtils.toString(response.getEntity()));
             client.close();
+            } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            }
+            */
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        */
-
     }
 }
 
