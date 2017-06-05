@@ -1,15 +1,9 @@
 package org.jabref.logic.sharelatex;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import javax.websocket.ClientEndpointConfig;
-import javax.websocket.Endpoint;
-import javax.websocket.EndpointConfig;
-import javax.websocket.MessageHandler.Whole;
 import javax.websocket.Session;
 
 import org.glassfish.tyrus.client.ClientManager;
@@ -24,7 +18,22 @@ public class WebSocketClientWrapper {
             final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create()
                     .preferredSubprotocols(Arrays.asList("mqttt")).build();
             ClientManager client = ClientManager.createClient();
-            client.connectToServer(new Endpoint() {
+
+            SharelatexClientEndpoint endpoint = new SharelatexClientEndpoint();
+            Session session = client.connectToServer(endpoint,
+                    new URI("ws://192.168.1.248/socket.io/1/websocket/" + channel));
+
+            Thread.sleep(100);
+
+            session.getBasicRemote().sendText(
+                    "5:1+::{\"name\":\"joinProject\",\"args\":[{\"project_id\":\"5909edaff31ff96200ef58dd\"}]}");
+
+
+
+            session.getBasicRemote().sendText("5:2+::{\"name\":\"joinDoc\",\"args\":[\"5909edb0f31ff96200ef58df\"]}");
+
+
+            /*   client.connectToServer(new Endpoint() {
 
                 @Override
                 public void onOpen(Session session, EndpointConfig config) {
@@ -43,9 +52,9 @@ public class WebSocketClientWrapper {
                         e.printStackTrace();
                     }
                     System.out.println("Sent");
+
                 }
-            }, cec, new URI("ws://192.168.1.248/socket.io/1/websocket/" + channel));
-            messageLatch.await(100, TimeUnit.SECONDS);
+            }, cec, new URI("ws://192.168.1.248/socket.io/1/websocket/" + channel));        */
         } catch (Exception e) {
             e.printStackTrace();
         }

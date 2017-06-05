@@ -1,7 +1,8 @@
 package org.jabref.logic.sharelatex;
 
 import java.io.IOException;
-import java.nio.file.Paths;
+
+import org.jabref.JabRefExecutorService;
 
 import org.junit.Test;
 
@@ -12,8 +13,16 @@ public class SharelatexConnectorTest {
         SharelatexConnector connector = new SharelatexConnector();
         connector.connectToServer("http://192.168.1.248", "joe@example.com", "test");
         connector.getProjects();
-        connector.uploadFile("591188ed98ba55690073c29e",
-                Paths.get("X:\\Users\\CS\\Documents\\_JABREFTEMP\\aaaaaaaaaaaaaa.bib"));
+        //   connector.uploadFile("591188ed98ba55690073c29e",Paths.get("X:\\Users\\CS\\Documents\\_JABREFTEMP\\aaaaaaaaaaaaaa.bib"));
+        //   connector.uploadFileWithWebClient("591188ed98ba55690073c29e",
+        //         Paths.get("X:\\Users\\CS\\Documents\\_JABREFTEMP\\aaaaaaaaaaaaaa.bib"));
+
+
+        JabRefExecutorService.INSTANCE.executeAndWait(()-> {
+
+                connector.StartWebsocketListener();
+
+        });
     }
 
 }

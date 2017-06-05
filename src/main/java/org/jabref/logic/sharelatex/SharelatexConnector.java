@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -100,6 +107,78 @@ public class SharelatexConnector {
         }
         return Optional.empty();
     }
+
+    public void StartWebsocketListener() {
+        long millis = System.currentTimeMillis();
+        System.out.println(millis);
+        try {
+            Connection.Response webSocketresponse = Jsoup.connect("http://192.168.1.248/socket.io/1")
+                    .cookies(loginCookies)
+                    .data("t", String.valueOf(millis)).method(Method.GET).execute();
+
+            System.out.println(webSocketresponse.body());
+
+            String resp = webSocketresponse.body();
+            String channel = resp.substring(0, resp.indexOf(":"));
+            System.out.println("Channel " + channel);
+
+            WebSocketClientWrapper.createAndConnect(channel);
+            // MqttPublishSample.connect(channel);
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void uploadFileWithWebClient(String projectId, Path path)
+    {
+        String activeProject = projectUrl + "/" + projectId;
+        String uploadUrl = activeProject + "/upload";
+
+        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_52);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setCssEnabled(true);
+        webClient.waitForBackgroundJavaScriptStartingBefore(100);
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+
+        webClient.getCookieManager()
+                .addCookie(new Cookie("192.168.1.248", "sharelatex.sid", loginCookies.get("sharelatex.sid")));
+
+        webClient.addRequestHeader("Referer", loginUrl);
+        HtmlPage p;
+        try {
+            p = webClient.getPage(activeProject);
+            System.out.println(p.getWebResponse().getContentAsString());
+
+
+        Optional<HtmlAnchor> anchor = p.getAnchors().stream()
+                .filter(a -> a.getAttribute("ng-click").equals("openUploadFileModal()")).findFirst();
+
+        anchor.ifPresent(x -> {
+            HtmlPage uploadPage;
+            try {
+                uploadPage = x.click();
+                    webClient.waitForBackgroundJavaScript(1000);
+                    System.out.println("Clickedd!\r\n");
+                    System.out.println(uploadPage.getWebResponse().getContentAsString());
+                    //  System.out.println(uploadPage.getElementByName("file"));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        webClient.close();
+        } catch (FailingHttpStatusCodeException | IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+    }
+
+
 
     public void uploadFile(String projectId, Path path) {
         String activeProject = projectUrl + "/" + projectId;
@@ -229,27 +308,7 @@ public class SharelatexConnector {
   }
 
 
-  long millis = System.currentTimeMillis();
-  System.out.println(millis);
-  try {
-      Connection.Response webSocketresponse = Jsoup.connect("http://192.168.1.248/socket.io/1")
-              .cookies(loginCookies)
-              .data("t", String.valueOf(millis)).method(Method.GET).execute();
 
-      System.out.println(webSocketresponse.body());
-
-      String resp = webSocketresponse.body();
-      String channel = resp.substring(0, resp.indexOf(":"));
-      System.out.println("Channel " + channel);
-
-
-      WebSocketClientWrapper.createAndConnect(channel);
-      // MqttPublishSample.connect(channel);
-
-  } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-  }
 
 });
 
