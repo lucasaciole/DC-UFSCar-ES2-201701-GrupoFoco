@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jabref.JabRefExecutorService;
 import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.sharelatex.ShareLatexProject;
 
@@ -54,5 +55,12 @@ public class ShareLatexManager {
             // connector.uploadFile(projectId, database.getDatabasePath().get());
 
         }
+    }
+
+    public void startWebSocketHandler(String projectID, BibDatabaseContext database) {
+        JabRefExecutorService.INSTANCE.executeAndWait(() -> {
+
+            connector.startWebsocketListener();
+        });
     }
 }

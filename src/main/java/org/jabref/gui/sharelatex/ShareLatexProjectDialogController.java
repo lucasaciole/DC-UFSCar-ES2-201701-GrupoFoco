@@ -1,6 +1,7 @@
 package org.jabref.gui.sharelatex;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -12,6 +13,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import org.jabref.gui.AbstractController;
 import org.jabref.gui.StateManager;
 import org.jabref.logic.sharelatex.ShareLatexManager;
+import org.jabref.model.database.BibDatabaseContext;
 
 public class ShareLatexProjectDialogController extends AbstractController<ShareLatexProjectDialogViewModel> {
 
@@ -53,12 +55,20 @@ public class ShareLatexProjectDialogController extends AbstractController<ShareL
     @FXML
     private void synchronizeLibrary() {
 
-        viewModel.projectsProperty().filtered(x -> x.isActive())
-                .forEach(item -> System.out.println(item.getProjectTitle()));
-        String projectId = "";
+        Optional<ShareLatexProjectViewModel> projects = viewModel.projectsProperty().filtered(x -> x.isActive())
+                .stream().findFirst();
 
-        stateManager.getActiveDatabase()
-                .ifPresent(database -> manager.uploadLibrary(projectId, database));
+
+        if (projects.isPresent() && stateManager.getActiveDatabase().isPresent())
+        {
+            String projectID = projects.get().getProjectId();
+            BibDatabaseContext database = stateManager.getActiveDatabase().get();
+
+            manager.startWebSocketHandler(projectID, database);
+        }
+
+
+
     }
 
     @FXML

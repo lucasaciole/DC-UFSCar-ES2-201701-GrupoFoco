@@ -20,7 +20,7 @@ public class SharelatexConnectorTest {
 
         JabRefExecutorService.INSTANCE.executeAndWait(()-> {
 
-                connector.StartWebsocketListener();
+            connector.startWebsocketListener();
 
         });
     }

@@ -108,7 +108,7 @@ public class SharelatexConnector {
         return Optional.empty();
     }
 
-    public void StartWebsocketListener() {
+    public void startWebsocketListener() {
         long millis = System.currentTimeMillis();
         System.out.println(millis);
         try {
@@ -298,6 +298,8 @@ public class SharelatexConnector {
             e.printStackTrace();
         }
     }
+
+
 }
 
 /*  for (JsonElement elem : projectArray) {
