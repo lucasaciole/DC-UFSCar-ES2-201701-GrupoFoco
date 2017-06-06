@@ -6,8 +6,8 @@ import org.jabref.Globals;
 import org.jabref.gui.keyboard.KeyBindingRepository;
 import org.jabref.gui.util.TaskExecutor;
 import org.jabref.logic.journals.JournalAbbreviationLoader;
+import org.jabref.preferences.PreferencesService;
 import org.jabref.logic.sharelatex.ShareLatexManager;
-import org.jabref.preferences.JabRefPreferences;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.airhacks.afterburner.injection.PresenterFactory;
@@ -28,7 +28,7 @@ public class DefaultInjector implements PresenterFactory {
             return new FXDialogService();
         } else if (clazz == TaskExecutor.class) {
             return Globals.taskExecutor;
-        } else if (clazz == JabRefPreferences.class) {
+        } else if (clazz == PreferencesService.class) {
             return Globals.prefs;
         } else if (clazz == KeyBindingRepository.class) {
             return Globals.getKeyPrefs();

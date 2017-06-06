@@ -297,7 +297,7 @@ tasks.withType(Test) {
 }
 
 task jacocoMerge(type: JacocoMerge) {
-    executionData test, fetcherTest, databaseTest
+    executionData test, databaseTest
 }
 
 jacocoTestReport {
