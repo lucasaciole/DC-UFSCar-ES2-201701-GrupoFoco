@@ -40,6 +40,10 @@ public class RISImporterTest {
             assertEquals(Optional.of("1988"), entry.getField(FieldName.YEAR));
             assertEquals(Optional.of("Cambridge"), entry.getField(FieldName.ADDRESS));
             assertEquals(Optional.of("robinson"), entry.getField("refid"));
+            assertEquals(Optional.of("pdf_link"), entry.getField(FieldName.PDF));
+            assertEquals(Optional.of("full_text_link"), entry.getField(FieldName.FULLTEXTLINK));
+            assertEquals(Optional.of("related_articles"), entry.getField(FieldName.RELATED));
+            assertEquals(Optional.of("image"), entry.getField(FieldName.IMAGE));
         }
     }
 
