@@ -62,11 +62,13 @@ public class FieldName {
     public static final String EVENTTITLE = "eventtitle";
     public static final String EVENTTITLEADDON = "eventtitleaddon";
     public static final String FILE = "file";
+    public static final String FULLTEXTLINK= "fulltextlink";
     public static final String FOREWORD = "foreword";
     public static final String FOLDER = "folder";
     public static final String GENDER = "gender";
     public static final String HOLDER = "holder";
     public static final String HOWPUBLISHED = "howpublished";
+    public static final String IMAGE= "image";
     public static final String INSTITUTION = "institution";
     public static final String INTRODUCTION = "introduction";
     public static final String ISBN = "isbn";

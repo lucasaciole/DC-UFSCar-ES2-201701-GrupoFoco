@@ -182,6 +182,14 @@ public class RisImporter extends Importer {
                         fields.put(FieldName.EDITION, value);
                     } else if ("SN".equals(tag)) {
                         fields.put(FieldName.ISSN, value);
+                    } else if ("L1".equals(tag)) {
+                        fields.put(FieldName.PDF, value);
+                    } else if ("L2".equals(tag)) {
+                        fields.put(FieldName.FULLTEXTLINK, value);
+                    } else if ("L3".equals(tag)) {
+                        fields.put(FieldName.RELATED, value);
+                    } else if ("L4".equals(tag)) {
+                        fields.put(FieldName.IMAGE, value);
                     } else if ("VL".equals(tag)) {
                         fields.put(FieldName.VOLUME, value);
                     } else if ("N2".equals(tag) || "AB".equals(tag)) {
