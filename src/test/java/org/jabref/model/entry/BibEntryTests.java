@@ -85,6 +85,21 @@ public class BibEntryTests {
         Assert.fail();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testeBibtexkeyMenorQue2Chars() {
+        BibEntry entry = new BibEntry(BibtexEntryTypes.BOOK.getName());
+        emptyEntry.setField("bibtexkey", "a");
+        Assert.fail();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testeBibtexkeyComNumeroNoPrimeiroChar() {
+        BibEntry entry = new BibEntry(BibtexEntryTypes.BOOK.getName());
+        emptyEntry.setField("bibtexkey", "1a2");
+        Assert.fail();
+    }
+
+
     @Test
     public void testDefaultConstructor() {
         BibEntry entry = new BibEntry();

@@ -388,7 +388,7 @@ public class BibEntry implements Cloneable {
         fields.forEach(this::setField);
     }
 
-    public boolean anoValido(String anoString) {
+    private boolean anoValido(String anoString) {
         try {
             //testa se o ano é um valor inteiro
             int ano = Integer.parseInt(anoString);
@@ -400,6 +400,23 @@ public class BibEntry implements Cloneable {
 
             //checa se o ano tem 4 digitos
             if ((ano <= 999) || (ano >= 10000)) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean bibtexkeyValida(String key) {
+        try {
+            //checa se tem pelo menos 2 caracteres
+            if (key.length() < 2) {
+                return false;
+            }
+
+            //checa se o primeiro digito eh uma letra
+            if (!Character.isLetter(key.charAt(0))) {
                 return false;
             }
         } catch (Exception e) {
@@ -440,7 +457,12 @@ public class BibEntry implements Cloneable {
                 || this.type.equals(BibtexEntryTypes.BOOK.getName().toLowerCase())) {
             if(fieldName.equals("year")) {
                 if(!anoValido(value)) {
-                    throw new IllegalArgumentException("O ano está incorreto.");
+                    throw new IllegalArgumentException("O ano está em um formato incorreto.");
+                }
+            }
+            if(fieldName.equals("bibtexkey")) {
+                if (!bibtexkeyValida(value)) {
+                    throw new IllegalArgumentException("A bibtexkey está em um formato incorreto.");
                 }
             }
         }
