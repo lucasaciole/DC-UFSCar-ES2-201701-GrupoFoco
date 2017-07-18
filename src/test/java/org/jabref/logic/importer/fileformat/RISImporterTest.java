@@ -5,17 +5,40 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
 
 import org.jabref.logic.util.FileExtensions;
+import org.jabref.model.entry.BibEntry;
+import org.jabref.model.entry.FieldName;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 public class RISImporterTest {
 
     private RisImporter importer;
 
+    @Test
+    public void testImportEntries() throws IOException, URISyntaxException {
+        Path file = Paths.get(BibtexImporterTest.class.getResource("RisImporterTest4b.ris").toURI());
+        List<BibEntry> bibEntries = importer.importDatabase(file, StandardCharsets.UTF_8).getDatabase().getEntries();
+
+        assertEquals(1, bibEntries.size());
+
+        for (BibEntry entry : bibEntries) {
+            assertEquals(Optional.of("book"), entry.getField(FieldName.TYPE));
+            assertEquals(Optional.of("Robinson, W. F."), entry.getField(FieldName.AUTHOR));
+            assertEquals(Optional.of("Huxtable, C. R. R."), entry.getField(FieldName.EDITOR));
+            assertEquals(Optional.of("Clinicopathologic Principles For Veterinary Medicine"), entry.getField(FieldName.TITLE));
+            assertEquals(Optional.of("Cambridge University Press"), entry.getField(FieldName.PUBLISHER));
+            assertEquals(Optional.of("1988"), entry.getField(FieldName.YEAR));
+            assertEquals(Optional.of("Cambridge"), entry.getField(FieldName.ADDRESS));
+            assertEquals(Optional.of("robinson"), entry.getField("refid"));
+        }
+    }
 
     @Before
     public void setUp() {
