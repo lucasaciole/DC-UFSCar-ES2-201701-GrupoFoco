@@ -38,49 +38,49 @@ public class BibEntryTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoZero() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.ARTICLE.getName());
         emptyEntry.setField("year", "0000");
         Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoString() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.BOOK.getName());
         emptyEntry.setField("year", "abcd");
         Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoNegativo() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.BOOK.getName());
         emptyEntry.setField("year", "-1111");
         Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoMenorQuePermitido() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.ARTICLE.getName());
         emptyEntry.setField("year", "999");
         Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoMaiorQuePermitido() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.BOOK.getName());
         emptyEntry.setField("year", "20000");
         Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoDouble() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.ARTICLE.getName());
         emptyEntry.setField("year", "3333.3");
         Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testeAnoCharNoMeio() {
-        BibEntry entry = new BibEntry();
+        BibEntry entry = new BibEntry(BibtexEntryTypes.BOOK.getName());
         emptyEntry.setField("year", "20o3");
         Assert.fail();
     }

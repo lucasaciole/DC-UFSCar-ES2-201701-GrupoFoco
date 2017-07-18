@@ -436,9 +436,12 @@ public class BibEntry implements Cloneable {
 
         changed = true;
 
-        if(fieldName.equals("year")) {
-            if(!anoValido(value)) {
-                throw new IllegalArgumentException("O ano está incorreto.");
+        if (this.type.equals(BibtexEntryTypes.ARTICLE.getName().toLowerCase())
+                || this.type.equals(BibtexEntryTypes.BOOK.getName().toLowerCase())) {
+            if(fieldName.equals("year")) {
+                if(!anoValido(value)) {
+                    throw new IllegalArgumentException("O ano está incorreto.");
+                }
             }
         }
 
