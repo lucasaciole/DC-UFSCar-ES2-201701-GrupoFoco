@@ -388,6 +388,26 @@ public class BibEntry implements Cloneable {
         fields.forEach(this::setField);
     }
 
+    public boolean anoValido(String anoString) {
+        try {
+            //testa se o ano é um valor inteiro
+            int ano = Integer.parseInt(anoString);
+
+            //testa se o ano é positivo
+            if (ano <= 0) {
+                return false;
+            }
+
+            //checa se o ano tem 4 digitos
+            if ((ano <= 999) || (ano >= 10000)) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Set a field, and notify listeners about the change.
      *
@@ -415,6 +435,12 @@ public class BibEntry implements Cloneable {
         }
 
         changed = true;
+
+        if(fieldName.equals("year")) {
+            if(!anoValido(value)) {
+                throw new IllegalArgumentException("O ano está incorreto.");
+            }
+        }
 
         fields.put(fieldName, value.intern());
         invalidateFieldCache(fieldName);
