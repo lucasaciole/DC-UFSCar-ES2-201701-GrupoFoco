@@ -388,6 +388,43 @@ public class BibEntry implements Cloneable {
         fields.forEach(this::setField);
     }
 
+    private boolean anoValido(String anoString) {
+        try {
+            //testa se o ano é um valor inteiro
+            int ano = Integer.parseInt(anoString);
+
+            //testa se o ano é positivo
+            if (ano <= 0) {
+                return false;
+            }
+
+            //checa se o ano tem 4 digitos
+            if ((ano <= 999) || (ano >= 10000)) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean bibtexkeyValida(String key) {
+        try {
+            //checa se tem pelo menos 2 caracteres
+            if (key.length() < 2) {
+                return false;
+            }
+
+            //checa se o primeiro digito eh uma letra
+            if (!Character.isLetter(key.charAt(0))) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Set a field, and notify listeners about the change.
      *
@@ -415,6 +452,20 @@ public class BibEntry implements Cloneable {
         }
 
         changed = true;
+
+        if (this.type.equals(BibtexEntryTypes.ARTICLE.getName().toLowerCase())
+                || this.type.equals(BibtexEntryTypes.BOOK.getName().toLowerCase())) {
+            if(fieldName.equals("year")) {
+                if(!anoValido(value)) {
+                    throw new IllegalArgumentException("O ano está em um formato incorreto.");
+                }
+            }
+            if(fieldName.equals("bibtexkey")) {
+                if (!bibtexkeyValida(value)) {
+                    throw new IllegalArgumentException("A bibtexkey está em um formato incorreto.");
+                }
+            }
+        }
 
         fields.put(fieldName, value.intern());
         invalidateFieldCache(fieldName);
