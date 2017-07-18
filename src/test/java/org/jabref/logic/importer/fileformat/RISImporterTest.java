@@ -1,5 +1,7 @@
 package org.jabref.logic.importer.fileformat;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -24,12 +26,13 @@ public class RISImporterTest {
     @Test
     public void testImportEntries() throws IOException, URISyntaxException {
         Path file = Paths.get(BibtexImporterTest.class.getResource("RisImporterTest4b.ris").toURI());
-        List<BibEntry> bibEntries = importer.importDatabase(file, StandardCharsets.UTF_8).getDatabase().getEntries();
+        BufferedReader utf8Reader = importer.getReader(file, StandardCharsets.UTF_8);
+        List<BibEntry> bibEntries = importer.importDatabase(utf8Reader).getDatabase().getEntries();
 
         assertEquals(1, bibEntries.size());
 
         for (BibEntry entry : bibEntries) {
-            assertEquals(Optional.of("book"), entry.getField(FieldName.TYPE));
+            assertEquals("book", entry.getType());
             assertEquals(Optional.of("Robinson, W. F."), entry.getField(FieldName.AUTHOR));
             assertEquals(Optional.of("Huxtable, C. R. R."), entry.getField(FieldName.EDITOR));
             assertEquals(Optional.of("Clinicopathologic Principles For Veterinary Medicine"), entry.getField(FieldName.TITLE));
